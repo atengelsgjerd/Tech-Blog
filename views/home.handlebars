@@ -1,1 +1,8 @@
 <h1 class="container border">HOME PAGE</h1>
+{{#if loggedIn}}
+{{#each blogPosts as |blogPost|}}
+{{> blog-post}}
+{{/each}}
+{{else}}
+<h1 class="container border">Please log in to view blog posts</h1>
+{{/if}}
