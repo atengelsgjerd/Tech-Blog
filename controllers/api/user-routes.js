@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { User } = require('../../models');
+const { User, BlogPost } = require('../../models');
 
 
 
@@ -48,6 +48,7 @@ router.post('/login', async (req, res) => {
 
         req.session.save(() => {
             req.session.loggedIn = true;
+            req.session.userId = userData.id;
             res
             .status(200)
             .json({user: userData, message: 'You are now logged in!'});
@@ -57,6 +58,63 @@ router.post('/login', async (req, res) => {
         res.status(500).json(err);
     }
 });
+
+//User-specific route to display logged-in user's blog posts
+// Modified route to display the logged-in user's blog posts without using Passport.js
+router.get('/dashboard', ensureAuthenticated, (req, res) => {
+    if (req.session.loggedIn) {
+        // Retrieve the current user's ID from the session
+        const userId = req.session.userId; // Assuming user ID is stored in the session
+
+        if (userId) {
+            // Query the database to fetch blog posts created by the current user
+            BlogPost.findAll({ where: { user_id: userId } }) // Use 'user_id' to match the foreign key in the BlogPost model
+                .then(blogPostData => {
+                    // Serialize data
+                    const blogPosts = blogPostData.map(blogPost => blogPost.get({ plain: true }));
+                    // Pass serialized data and session flag into the template
+                    res.render('dashboard', { blogPosts, loggedIn: req.session.loggedIn });
+                })
+                .catch(err => {
+                    console.error(err);
+                    res.status(500).send('Error fetching user posts');
+                });
+        } else {
+            res.status(400).send('User ID not found in session');
+        }
+    } else {
+        res.redirect('/login'); // Redirect to login page if session is not authenticated
+    }
+});
+//Middleware function to ensure user is authenticated
+function ensureAuthenticated(req, res, next) {
+    if (req.session.loggedIn) {
+        return next();
+    }
+    res.redirect('/login');
+}
+
+//get one post
+router.get('/:id', async (req, res) => {
+    try {
+        const blogPostData = await BlogPost.findByPk(req.params.id, {
+            include: [{ model: User, attributes: ['username']}],
+        });
+
+        if (!blogPostData) {
+            res.status(404).json({message: 'No post found with this id!'});
+            return;
+        }
+
+        const blogPost = blogPostData.get({ plain: true });
+        res.render('single-post', {blogPost, loggedIn: req.session.loggedIn});
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//update post
+// router.put('/:id', async (req, res))
 
 //Logout
 router.post('/logout', (req, res) => {

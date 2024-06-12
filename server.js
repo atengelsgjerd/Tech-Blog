@@ -4,7 +4,18 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 const routes = require('./controllers');
 const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const hbs = exphbs.create({});
+
+const handlebars = require('handlebars');
+
+handlebars.registerHelper('eq', function(arg1, arg2, options) {
+    if (arg1 === arg2) {
+        return options.fn ? options.fn(this) : '';
+    } else {
+        return options.inverse ? options.inverse(this) : '';
+    }
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,6 +27,15 @@ const sess = {
     secret: 'Super secret secret',
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict'
+    },
+    store: new SequelizeStore({
+        db: sequelize
+    })
 };
 
 app.use(session(sess));

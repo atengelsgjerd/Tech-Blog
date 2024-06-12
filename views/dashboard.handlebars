@@ -1,0 +1,16 @@
+
+{{> nav}}
+{{#each blogPosts}}
+<div class="card text-center">
+  <div class="card-header">
+  </div>
+  <div class="card-body">
+    <h5 class="card-title" id="title">{{this.title}}</h5>
+    <p class="card-text" id="content">{{this.content}}</p>
+    <a href="/api/users/{{this.id}}" class="btn btn-primary">Update</a>
+  </div>
+  <div class="card-footer text-body-secondary">
+    Created: {{this.createdAt}}
+  </div>
+</div>
+{{/each}}
