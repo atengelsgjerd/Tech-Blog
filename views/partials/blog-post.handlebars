@@ -1,13 +1,19 @@
-<div class="card text-center">
-  <div class="card-header">
-    Author: {{user.username}}
-  </div>
-  <div class="card-body">
-    <h5 class="card-title" id="title">{{title}}</h5>
-    <p class="card-text" id="content">{{content}}</p>
-    <a href="/api/users/{{id}}" class="btn btn-primary">Update</a>
-  </div>
-  <div class="card-footer text-body-secondary">
-    Created: {{createdAt}}
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-header bg-success text-light">
+          Author: {{user.username}}
+        </div>
+        <div class="card-body bg-dark-subtle">
+          <h5 class="card-title" id="title">{{title}}</h5>
+          <p class="card-text" id="content">{{content}}</p>
+          <a href="/api/users/{{id}}" class="btn btn-outline-success p-2 m-2 text-dark">Update</a>
+        </div>
+        <div class="card-footer text-body-secondary">
+          Created: {{createdAt}}
+        </div>
+      </div>
+    </div>
   </div>
 </div>

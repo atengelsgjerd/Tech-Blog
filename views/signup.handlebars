@@ -1,19 +1,23 @@
-<h1 class="d-inline p-2 m-2 text-bg-primary">Sign Up</h1>
-{{!-- <div class="d-inline p-2 text-bg-primary">d-inline</div> --}}
-<form>
-  <div class="col-md-4 mb-3">
-    <label for="username" class="form-label mt-3 px-3">Username</label>
+{{>nav}}
+<div class="container-fluid d-flex justify-content-center">
+<h1 class="d-inline p-2 m-2 text-bg text-white">Sign Up</h1>
+</div>
+<div class="container d-flex justify-content-center">
+<form class="form signup-form">
+  <div class="mb-3">
+    <label for="username" class="form-label mt-3 px-3 text-white">Username:</label>
     <input type="username" class="form-control px-2 mx-2" id="username" aria-describedby="emailHelp" autocomplete="off">
   </div>
-  <div class="col-md-4 mb-3">
-    <label for="email" class="form-label mt-3 px-3">Email address</label>
-    <input type="email" class="form-control px-2 mx-2" id="email" aria-describedby="emailHelp" autocomplete="off">
-    <div id="emailHelp" class="form-text m-2">We'll never share your email with anyone else.</div>
+  <div class="mb-3">
+    <label for="signUpEmail" class="form-label mt-3 px-3 text-white">Email address:</label>
+    <input type="email" class="form-control px-2 mx-2" id="signUpEmail" aria-describedby="emailHelp" autocomplete="off">
+    <div id="emailHelp" class="form-text m-2 text-white">We'll never share your email with anyone else.</div>
   </div>
-  <div class="col-md-4 mb-3">
-    <label for="password" class="form-label px-3">Password</label>
-    <input type="password" class="form-control px-2 mx-2" id="password" autocomplete="off">
+  <div class="mb-3">
+    <label for="signUpPassword" class="form-label px-3 text-white">Password:</label>
+    <input type="password" class="form-control px-2 mx-2" id="signUpPassword" autocomplete="off">
   </div>
-  <button type="submit" class="btn btn-primary p-2 m-2" id="submitBtn">Submit</button>
+  <button type="button" class="btn btn-outline-success p-2 m-2 text-white" id="submitBtn">Submit</button>
 </form>
+</div>
 <script src="./js/signup.js"></script>
