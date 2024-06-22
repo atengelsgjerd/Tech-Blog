@@ -8,11 +8,14 @@
         <div class="card-body bg-dark-subtle">
           <h5 class="card-title" id="title">{{title}}</h5>
           <p class="card-text" id="content">{{content}}</p>
+          {{#if user.id}}
           <a href="/api/users/{{id}}" class="btn btn-outline-success p-2 m-2 text-dark">Update</a>
+          {{/if}}
         </div>
         <div class="card-footer text-body-secondary">
           Created: {{createdAt}}
         </div>
+        {{> comment}}
       </div>
     </div>
   </div>

@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 3001;
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
@@ -18,7 +19,7 @@ handlebars.registerHelper('eq', function(arg1, arg2, options) {
 });
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+
 
 
 

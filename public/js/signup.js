@@ -5,7 +5,7 @@ const signUpFormFunction = async (event) => {
     const email = document.querySelector('#signUpEmail').value.trim();
     const password = document.querySelector('#signUpPassword').value.trim();
     if (username && email && password) {
-        const response = await axios.post('/api/users', {username, email, password});   
+        const response = await axios.post('/api/users/signup', {username, email, password});   
         if (response.status === 200) {
             document.location.assign('/');
             console.log('logged in');
