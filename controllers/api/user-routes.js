@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { User, BlogPost } = require('../../models');
+const { User, BlogPost, Comment } = require('../../models');
 
 
 
@@ -17,7 +17,7 @@ router.post('/signup', async (req, res) => {
             req.session.loggedIn = true;
             res.status(200).json(userData);
         });
-    }catch (err) {
+    } catch (err) {
         console.log(err);
         res.status(500).json(err);
     }
@@ -33,16 +33,16 @@ router.post('/login', async (req, res) => {
         });
         if (!userData) {
             res
-            .status(400)
-            .json({message: 'Incorrect email or password, please try again'});
+                .status(400)
+                .json({ message: 'Incorrect email or password, please try again' });
             return;
         }
         const validPassword = await userData.checkPassword(req.body.password);
 
         if (!validPassword) {
             res
-            .status(400)
-            .json({message: 'Incorrect email or password, please try again'});
+                .status(400)
+                .json({ message: 'Incorrect email or password, please try again' });
             return;
         }
 
@@ -50,8 +50,8 @@ router.post('/login', async (req, res) => {
             req.session.loggedIn = true;
             req.session.userId = userData.id;
             res
-            .status(200)
-            .json({user: userData, message: 'You are now logged in!'});
+                .status(200)
+                .json({ user: userData, message: 'You are now logged in!' });
         });
     } catch (err) {
         console.log(err);
@@ -98,16 +98,28 @@ function ensureAuthenticated(req, res, next) {
 router.get('/:id', async (req, res) => {
     try {
         const blogPostData = await BlogPost.findByPk(req.params.id, {
-            include: [{ model: User, attributes: ['username']}],
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']
+                },
+                {
+                    model: Comment,
+                    include: {
+                        model: User,
+                        attributes: ['username']
+                    }
+                }
+            ],
         });
 
         if (!blogPostData) {
-            res.status(404).json({message: 'No post found with this id!'});
+            res.status(404).json({ message: 'No post found with this id!' });
             return;
         }
 
         const blogPost = blogPostData.get({ plain: true });
-        res.render('single-post', {blogPost, loggedIn: req.session.loggedIn});
+        res.render('single-post', { blogPost, loggedIn: req.session.loggedIn });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -129,18 +141,7 @@ router.post('/', async (req, res) => {
 });
 
 //comment on post
-router.post('/comment', async (req, res) => {
-    try {
-        const newComment = await Comment.create({
-            ...req.body,
-            user_id: req.session.userId
-        });
 
-        res.status(200).json(newComment);
-    } catch (err) {
-        res.status(400).json(err);
-    }
-});
 //update post
 // router.put('/:id', async (req, res))
 
