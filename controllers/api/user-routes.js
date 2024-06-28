@@ -63,27 +63,33 @@ router.post('/login', async (req, res) => {
 // Modified route to display the logged-in user's blog posts without using Passport.js
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
     if (req.session.loggedIn) {
-        // Retrieve the current user's ID from the session
-        const userId = req.session.userId; // Assuming user ID is stored in the session
+        const userId = req.session.userId;
 
         if (userId) {
-            // Query the database to fetch blog posts created by the current user
-            BlogPost.findAll({ where: { user_id: userId } }) // Use 'user_id' to match the foreign key in the BlogPost model
-                .then(blogPostData => {
-                    // Serialize data
-                    const blogPosts = blogPostData.map(blogPost => blogPost.get({ plain: true }));
-                    // Pass serialized data and session flag into the template
-                    res.render('dashboard', { blogPosts, loggedIn: req.session.loggedIn });
-                })
-                .catch(err => {
-                    console.error(err);
-                    res.status(500).send('Error fetching user posts');
+            BlogPost.findAll({ 
+                where: { user_id: userId }, 
+                include: Comment // Include the Comment model to fetch associated comments
+            })
+            .then(blogPostData => {
+                const blogPosts = blogPostData.map(blogPost => {
+                    console.log('Blog post content:', blogPost.content);
+                    console.log('Blog post comments:', blogPost.Comments);
+                    const serializedBlogPost = blogPost.get({ plain: true });
+                    serializedBlogPost.comment = blogPost.Comment?.map(comment => comment.get({ plain: true })) || [];
+                    return serializedBlogPost;
                 });
+                console.log('User blog posts:', blogPosts);
+                res.render('dashboard', { blogPosts, loggedIn: req.session.loggedIn });
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).send('Error fetching user posts');
+            });
         } else {
             res.status(400).send('User ID not found in session');
         }
     } else {
-        res.redirect('/login'); // Redirect to login page if session is not authenticated
+        res.redirect('/login');
     }
 });
 //Middleware function to ensure user is authenticated

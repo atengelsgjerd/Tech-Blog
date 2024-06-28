@@ -1,4 +1,4 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,6 +22,14 @@
 </div>
 <div class="container d-flex justify-content-center">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-        data-bs-whatever="@mdo" >New Comment</button>
-</div>
-
+        data-bs-whatever="@mdo" data-blog-id="{{id}}" id="newCommentBtn">New Comment</button>
+</div> --}}
+<form class="new-comment-form formCont d-flex flex-wrap justify-content-center" data-blogid="{{id}}">
+    <div class="textAreaCont p-2">
+        <textarea id='comment' name="comment-body" placeholder="Enter a comment here..." cols="30"
+            rows="2"></textarea>
+    </div>
+    <div class="btnComment p-2">
+        <button class="button btn btn-success" type="submit" id="newCommentBtn">Add Comment</button>
+    </div>
+</form>

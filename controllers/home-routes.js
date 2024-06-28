@@ -36,16 +36,21 @@ router.get('/', async (req, res) => {
         });
 
         const blogPosts = blogPostData.map((blogPost) => {
+            console.log('Blog post content:', blogPost.content);
+            
             const post = blogPost.get({ plain: true });
-            post.user = blogPost.User ? blogPost.User.get({ plain: true}) : null;
-            post.comments = blogPost.Comments ? blogPost.Comments.map((comment) => {
+            post.users = blogPost.User ? blogPost.User.get({ plain: true}) : null;
+            post.comment = blogPost.Comment ? blogPost.Comment.map((comment) => {
+                console.log('Comment content:', comment.content);
+                console.log('Comment user:', comment.Users ? comment.Users.username : 'No user');
                 const com = comment.get({ plain: true });
-                com.user = comment.User ? comment.User.get({ plain: true}) : null;
+                com.users = comment.Users ? comment.Users.get({ plain: true}) : null;
+                console.log('Plain comment:', com);
                 return com;
             }) : [];
             return post;
         });
-
+        console.log('Blog posts with comments:', blogPosts);
         res.render('home', {
             blogPosts,
             loggedIn: req.session.loggedIn,

@@ -8,6 +8,12 @@
           <h5 class="card-title" id="title">{{this.title}}</h5>
           <p class="card-text" id="content">{{this.content}}</p>
           <a href="/api/users/{{this.id}}" class="btn btn-outline-success p-2 m-2 text-dark">Update</a>
+          <h5 class="card-text" id="comHeader">Comments:</h5>
+          <ul>
+            {{#each this.comments as |comment|}}
+            <li>{{content}}</li>
+            {{/each}}
+          </ul>
         </div>
         <div class="card-footer text-body-secondary">
           Created: {{this.createdAt}}
