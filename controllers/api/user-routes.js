@@ -68,17 +68,31 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
         if (userId) {
             BlogPost.findAll({ 
                 where: { user_id: userId }, 
-                include: Comment // Include the Comment model to fetch associated comments
+                include: [
+                    {
+                        model: User,
+                        attributes: ['username'],
+                    },
+                    { model: Comment,
+                        attributes: ['content', 'user_id', 'blogPost_id', 'createdAt'],
+                        include: {
+                            model: User,
+                            attributes: ['username'],
+                        },
+                     },
+                ], // Include the Comment model to fetch associated comments
             })
             .then(blogPostData => {
                 const blogPosts = blogPostData.map(blogPost => {
-                    console.log('Blog post content:', blogPost.content);
-                    console.log('Blog post comments:', blogPost.Comments);
+                    // console.log('Blog post content:', blogPost.content);
+                    // console.log('Blog post user:', blogPost.user.username);
+                    // console.log('Blog post comments:', blogPost.comments);
                     const serializedBlogPost = blogPost.get({ plain: true });
                     serializedBlogPost.comment = blogPost.Comment?.map(comment => comment.get({ plain: true })) || [];
                     return serializedBlogPost;
                 });
-                console.log('User blog posts:', blogPosts);
+                // console.log('User blog posts:', blogPosts);
+                
                 res.render('dashboard', { blogPosts, loggedIn: req.session.loggedIn });
             })
             .catch(err => {
@@ -138,6 +152,7 @@ router.post('/', async (req, res) => {
             user_id: req.session.userId
         });
         console.log("req.body", req.body);
+        console.log('user id', req.session.userId);
 
         res.status(200).json(newPost);
         console.log("Post created successfully", newPost);
@@ -146,7 +161,27 @@ router.post('/', async (req, res) => {
     }
 });
 
-//comment on post
+//delete post
+router.delete('/:id', async (req, res) => {
+    try {
+        const blogPostData = await BlogPost.destroy({
+            where: {
+                id: req.params.id,
+                user_id: req.session.userId,
+            },
+        });
+
+        if (!blogPostData) {
+            res.status(404).json({ message: 'No post found with this id!' });
+            return;
+        }
+
+        res.status(200).json(blogPostData);
+    } catch (err) {
+        console.log('error', err);
+        res.status(500).json(err);
+    }
+});
 
 //update post
 // router.put('/:id', async (req, res))

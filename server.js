@@ -4,9 +4,12 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const routes = require('./controllers');
+// const helpers = require('./utils/helpers');
 const sequelize = require('./config/connection');
+
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const hbs = exphbs.create({});
+const hbs = exphbs.create({  });
+
 
 const handlebars = require('handlebars');
 
@@ -16,6 +19,10 @@ handlebars.registerHelper('eq', function(arg1, arg2, options) {
     } else {
         return options.inverse ? options.inverse(this) : '';
     }
+});
+
+handlebars.registerHelper('format_date', (date) => {
+    return date.toLocaleDateString();
 });
 
 const app = express();

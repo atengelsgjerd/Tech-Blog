@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
                     attributes: ['username'],
                 },
                 { model: Comment,
-                    attributes: ['content'],
+                    attributes: ['content', 'user_id', 'blogPost_id', 'createdAt'],
                     include: {
                         model: User,
                         attributes: ['username'],
@@ -39,17 +39,18 @@ router.get('/', async (req, res) => {
             console.log('Blog post content:', blogPost.content);
             
             const post = blogPost.get({ plain: true });
-            post.users = blogPost.User ? blogPost.User.get({ plain: true}) : null;
-            post.comment = blogPost.Comment ? blogPost.Comment.map((comment) => {
-                console.log('Comment content:', comment.content);
-                console.log('Comment user:', comment.Users ? comment.Users.username : 'No user');
-                const com = comment.get({ plain: true });
-                com.users = comment.Users ? comment.Users.get({ plain: true}) : null;
-                console.log('Plain comment:', com);
-                return com;
-            }) : [];
+            // post.users = blogPost.User ? blogPost.User.get({ plain: true}) : null;
+            // post.comment = blogPost.Comment ? blogPost.Comment.map((comment) => {
+            //     const com = comment.get({ plain: true });
+            //     com.user = comment.Users ? comment.Users.get({ plain: true}) : null;
+            //     console.log('Plain comment:', com);
+            //     return com;
+            // }) : [];
+            console.log('Post:', post);
             return post;
         });
+        
+        // console.log('comments:', blogPosts[0].comment[0].content);
         console.log('Blog posts with comments:', blogPosts);
         res.render('home', {
             blogPosts,

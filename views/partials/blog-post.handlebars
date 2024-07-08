@@ -12,7 +12,7 @@
           <h5 class="card-text" id="comHeader">Comments:</h5>
           <ul>
             {{#each comments as |comment|}}
-            <li>{{comment.content}}</li>
+            <li>{{comment.content}} by <i>{{user.username}}</i> on <i>{{format_date comment.createdAt}}</i></li>
             {{/each}}
           </ul>
           {{#if user.id}}
@@ -20,7 +20,7 @@
           {{/if}}
         </div>
         <div class="card-footer text-body-secondary">
-          Created: {{createdAt}}
+          Created: {{format_date createdAt}}
         </div>
       </div>
     </div>
