@@ -3,8 +3,9 @@ const editBlogPost = async (event) => {
     event.preventDefault();
     const title = document.querySelector('#postTitle').value.trim();
     const content = document.querySelector('#postContent').value.trim();
+    const id = window.location.toString().split('/')[window.location.toString().split('/').length - 1];
     if (title && content) {
-        const response = await axios.put('/api/users', {title, content});
+        const response = await axios.put(`/api/users/${id}`, {title, content});
         if (response.status === 200) {
             document.location.assign('/api/users/dashboard');
             console.log('New blog post created');
@@ -19,7 +20,7 @@ console.log(editPageUrl.split('/'));
 const editPage = editPageUrl.split('/');
 if (!editPage.includes('dashboard')){
     document
-    .querySelector('#updatePost')
+    .querySelector('#updatePostBtn')
     .addEventListener('click', editBlogPost);
 } else {
     document.querySelector('#updateBtn').style.display = 'none';
