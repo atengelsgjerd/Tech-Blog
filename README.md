@@ -3,6 +3,8 @@
     This is a blog website for any web developers who want to read and interact with other developers who have a passion for coding and developing websites and applications.
   
   ![License:](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+  ![alt text](./assets/images/Screenshot%20(103).png)
     
   ---
   ## Table of Contents
@@ -10,7 +12,7 @@
   * [User Story](#user-story)
   * [Installation](#installation)
   * [Contributing](#contributing)
-  * [Tests](#tests)
+  * [Application Link](#application-link)
   * [Questions](#questions)
   * [License](#license)
   
@@ -23,7 +25,9 @@
   
   ## User Story
   ```
-  N/A
+ AS A developer who writes about tech
+ I WANT a CMS-style blog site
+ SO THAT I can publish articles, blog posts, and my thoughts and opinions
   ``` 
   
   ---
@@ -69,8 +73,8 @@
   
   ---
   
-  ## Tests:
-    N/A
+  ## Application Link:
+https://tech-blog-rbkm.onrender.com
   
   ---
   
